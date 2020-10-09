@@ -25,13 +25,21 @@ class MusiicDetail(generics.RetrieveUpdateDestroyAPIView):
   filter_backends = (filters.DjangoFilterBackend,)
   filter_fields = '__all__'
 
+class AlbumFilter(filters.FilterSet):
+  date_gte = filters.DateFilter(name = "date", lookup_expr = 'gte')
+  date_gte = filters.DateFilter(name = "date", lookup_expr = 'gte')
+
+  class Meta:
+    model = Album
+    fields = '__all__'
+
 class AlbumList(generics.ListCreateAPIView):
   queryset = Album.objects.all()
   serializer_class = AlbumSerializer
   authentication_classes = [OAuth2Authentication, SessionAuthentication]
   permission_classes = [Or(IsAdminUser, TokenHasReadWriteScope)]
   filter_backends = (filters.DjangoFilterBackend,)
-  filter_fields = '__all__'
+  filter_class = AlbumFilter
 
 class AlbumDetail(generics.RetrieveUpdateDestroyAPIView):
   queryset = Album.objects.all()
